@@ -22,9 +22,18 @@ const minutiaePtr = ref.refType('char');
 const encryptedMinutiae = Buffer.alloc(512);
 const encryptedMinutiaePtr = ref.refType('char');
 
+const keyPath = '../../testKeyPairs/keyfile-pub.key';
+
+const encryptedSkey = Buffer.alloc(256);
+const encryptedSkeyPtr = ref.refType('char');
+
 const encryptDll = ffi.Library('./encrypt', {
-  'gen_aes_encrypted_minutiae': ['int', [ minutiaePtr, ivPtr, keyPtr, encryptedMinutiaePtr ]]
+  'gen_aes_encrypted_minutiae': ['int', [ minutiaePtr, ivPtr, keyPtr, encryptedMinutiaePtr ]],
+  'gen_rsa_encrypted_skey': ['int', [ keyPtr, 'String', encryptedSkeyPtr ]]
 });
 
 encryptDll.gen_aes_encrypted_minutiae(minutiaeBuf, iv, key, encryptedMinutiae);
 console.log('encryptedMinutiae: ', encryptedMinutiae.toString('hex'));
+
+encryptDll.gen_rsa_encrypted_skey(key, keyPath, encryptedSkey);
+console.log('encryptedSkey: ', encryptedSkey.toString('hex'));
