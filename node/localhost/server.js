@@ -12,7 +12,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(decryptSkey.decrypt, decryptMinutiae.decrypt);
 
 app.use('/', (req, res) => {
-	res.send('Hello World!');
+	res.send({
+		message: 'Decryption Success',
+		minutiae: req.body.minutiae,
+	});
 });
 
 app.listen(config.port, () => {
