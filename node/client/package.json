@@ -5,7 +5,8 @@
   "main": "client.js",
   "dependencies": {
     "ffi": "^2.2.0",
-    "ref": "^1.3.5"
+    "ref": "^1.3.5",
+    "request": "^2.85.0"
   },
   "devDependencies": {
     "eslint": "^4.9.0",
