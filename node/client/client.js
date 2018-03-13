@@ -2,12 +2,19 @@ const ffi = require('ffi');
 const ref = require('ref');
 const request = require('request');
 
-const encryptConfig = require('./config');
+const encryptConfig = require('./encryptConfig');
+const testEnvConfig = require('./testEnvConfig');
 
 const keyPtr = ref.refType('char');
 const ivPtr = ref.refType('char');
 
-const minutiaeBuf = Buffer.from(encryptConfig.minutiaeStr, 'hex');
+const requestCb = (err, res, body) => {
+  console.log('error: ', err);
+  console.log('statusCode: ', res && res.statusCode);
+  console.log('body: ', body);
+};
+
+const minutiaeBuf = Buffer.from(testEnvConfig.minutiaeStr, 'hex');
 const minutiaePtr = ref.refType('char');
 
 const encryptedMinutiae = Buffer.alloc(512);
@@ -27,17 +34,24 @@ console.log('\nencryptedMinutiae:\n', encryptedMinutiae.toString('hex'));
 encryptDll.gen_rsa_encrypted_skey(encryptConfig.key, encryptConfig.keyPath, encryptedSkey);
 console.log('\nencryptedSkey:\n', encryptedSkey.toString('hex'));
 
-request.post( {
-  url: `${encryptConfig.addFpUrl}`,
-  form: {
-    fpIndex: `${encryptConfig.fpIndex}`,
-    encMinutiae: `${encryptedMinutiae.toString('hex')}`,
-    userId: `${encryptConfig.userId}`,
-    eSkey: `${encryptedSkey.toString('hex')}`,
-    iv: `${encryptConfig.iv.toString('hex')}`
-  },
-}, (err, res, body) => {
-  console.log('error: ', err);
-  console.log('statusCode: ', res && res.statusCode);
-  console.log('body: ', body);
-});
+if ( 'secure' === testEnvConfig.env ) {
+  request.post( {
+    url: `${testEnvConfig.addFpUrl}`,
+    form: {
+      fpIndex: `${testEnvConfig.fpIndex}`,
+      encMinutiae: `${encryptedMinutiae.toString('hex')}`,
+      userId: `${testEnvConfig.userId}`,
+      eSkey: `${encryptedSkey.toString('hex')}`,
+      iv: `${encryptConfig.iv.toString('hex')}`
+    },
+  }, requestCb);
+} else {
+  request.post( {
+    url: `${testEnvConfig.addFpUrl}`,
+    form: {
+      fpIndex: `${testEnvConfig.fpIndex}`,
+      minutiae: `${testEnvConfig.minutiaeStr}`,
+      userId: `${testEnvConfig.userId}`,
+    },
+  }, requestCb);
+}

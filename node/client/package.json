@@ -14,6 +14,7 @@
     "eslint-plugin-import": "^2.9.0"
   },
   "scripts": {
+    "start": "node client.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
