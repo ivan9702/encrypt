@@ -22,6 +22,7 @@ app.use('/', (req, res) => {
 });
 
 app.use((err, req, res, next) => {
+	console.error('Decryption Failed !!');
 	res.status(400).send('Decryption Failed !!');
 });
 
