@@ -8,8 +8,8 @@ exports.decrypt = (req, res, next) => {
 		const decrypted = decipher.update(Buffer.from(req.body.encMinutiae, 'hex'));
 		decipher.final();
 		req.body.minutiae = decrypted.toString('hex');
+		next();
 	} catch (err) {
-		res.status(400).send('Failed to decrypt minutiae !!');
+		next(err);
 	}
-	next();
 };

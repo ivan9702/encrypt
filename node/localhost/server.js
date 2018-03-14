@@ -21,6 +21,10 @@ app.use('/', (req, res) => {
 	});
 });
 
+app.use((err, req, res, next) => {
+	res.status(400).send('Decryption Failed !!');
+});
+
 app.listen(config.port, () => {
 	console.log(`Server is up at port ${config.port}`);
 });

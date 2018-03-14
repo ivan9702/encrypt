@@ -7,8 +7,8 @@ exports.decrypt = (req, res, next) => {
 			key: config.prk,
 			padding: crypto.constants.RSA_PKCS1_PADDING,
 		}, Buffer.from(req.body.eSkey, 'hex'));
+		next();
 	} catch (err) {
-		res.status(400).send('Failed to decrypt session key !!');
+		next(err);
 	}
-	next();
 };
