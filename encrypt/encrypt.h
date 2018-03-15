@@ -42,3 +42,18 @@ extern "C" ENCRYPT_EXPORTS int gen_aes_encrypted_minutiae(const unsigned char *m
 */
 extern "C" ENCRYPT_EXPORTS int gen_rsa_encrypted_skey(const unsigned char *session_key, 
 	const char *rsa_key_path, unsigned char *encrypted_session_key);
+
+/**
+* \brief          Generate random bytes for iv or session key
+*                 Refer to
+*                 '\mbedtls\programs\random\gen_entropy.c'
+*
+*                 Total # of bytes = num_of_block * (16 bytes per block)
+*                 e.g., 2 blocks * 16 bytes per block = 32 bytes
+*
+* \param num_of_block     Expected number of block
+* \param random_bytes     Pointer to the content of expected random bytes
+*
+* \return         0 on success, or 1 on failure.
+*/
+extern "C" ENCRYPT_EXPORTS int gen_random_bytes(size_t num_of_block, unsigned char *random_bytes);
