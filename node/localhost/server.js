@@ -10,9 +10,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(logger.reqBody);
+app.use(logger.reqBody('bfDecrypt'));
 app.use(decryptSkey.decrypt, decryptMinutiae.decrypt);
-app.use(logger.reqBody);
+app.use(logger.reqBody());
 
 app.use('/', (req, res) => {
 	res.send({
